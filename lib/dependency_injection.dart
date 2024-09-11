@@ -142,40 +142,56 @@ final sl = GetIt.instance;
 
 void init() async {
   // register repository
+  sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()));
+  sl.registerLazySingleton<ProfileRepositories>(() => ProfileRepositoriesImpl(remoteDataSource: sl(), networkInfo: sl()));
+  sl.registerLazySingleton<PostRepositories>(() => PostRepositoriesImpl(remoteDataSource: sl(), networkInfo: sl()));
+  sl.registerLazySingleton<UploadRepositories>(() => UploadRepositoriesImpl(remoteDataSource: sl(), networkInfo: sl()));
+  sl.registerLazySingleton<CommunityRepositories>(() => CommunityRepositoriesImpl(remoteDataSource: sl(), networkInfo: sl()));
+  sl.registerLazySingleton<ChatRepositories>(() => ChatRepositoriesImpl(remoteDataSource: sl(), networkInfo: sl()));
+  sl.registerLazySingleton<EventRepositories>(() => EventRepositoriesImpl(remoteDataSource: sl(), networkInfo: sl()));
+  sl.registerLazySingleton<NotificationRepositories>(() => NotificationRepositoriesImpl(remoteDataSource: sl(), networkInfo: sl()));
   sl.registerLazySingleton<AuthRepository>(
-      () => AuthRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()));
+          () => AuthRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()));
   sl.registerLazySingleton<ProfileRepositories>(
-      () => ProfileRepositoriesImpl(remoteDataSource: sl(), networkInfo: sl()));
+          () => ProfileRepositoriesImpl(remoteDataSource: sl(), networkInfo: sl()));
   sl.registerLazySingleton<PostRepositories>(
-      () => PostRepositoriesImpl(remoteDataSource: sl(), networkInfo: sl()));
+          () => PostRepositoriesImpl(remoteDataSource: sl(), networkInfo: sl()));
   sl.registerLazySingleton<UploadRepositories>(
-      () => UploadRepositoriesImpl(remoteDataSource: sl(), networkInfo: sl()));
+          () => UploadRepositoriesImpl(remoteDataSource: sl(), networkInfo: sl()));
   sl.registerLazySingleton<CommunityRepositories>(() =>
       CommunityRepositoriesImpl(remoteDataSource: sl(), networkInfo: sl()));
   sl.registerLazySingleton<ChatRepositories>(
-      () => ChatRepositoriesImpl(remoteDataSource: sl(), networkInfo: sl()));
+          () => ChatRepositoriesImpl(remoteDataSource: sl(), networkInfo: sl()));
   sl.registerLazySingleton<EventRepositories>(
-      () => EventRepositoriesImpl(remoteDataSource: sl(), networkInfo: sl()));
+          () => EventRepositoriesImpl(remoteDataSource: sl(), networkInfo: sl()));
   sl.registerLazySingleton<NotificationRepositories>(() =>
       NotificationRepositoriesImpl(remoteDataSource: sl(), networkInfo: sl()));
 
   // register datasource
+  sl.registerLazySingleton<AuthRemoteDataSource>(() => AuthRemoteDataSourceImpl(client: sl()));
+  sl.registerLazySingleton<ProfileRemoteDataSource>(() => ProfileRemoteDataSourceImpl(client: sl()));
+  sl.registerLazySingleton<PostRemoteDataSource>(() => PostRemoteDataSourceImpl(client: sl()));
+  sl.registerLazySingleton<UploadRemoteDataSource>(() => UploadRemoteDataSourceImpl(client: sl()));
+  sl.registerLazySingleton<CommunityRemoteDataSource>(() => CommunityRemoteDataSourceImpl(client: sl()));
+  sl.registerLazySingleton<ChatRemoteDataSource>(() => ChatRemoteDataSourceImpl(client: sl()));
+  sl.registerLazySingleton<EventRemoteDataSource>(() => EventRemoteDataSourceImpl(client: sl()));
+  sl.registerLazySingleton<NotificationRemoteDataSource>(() => NotificationRemoteDataSourceImpl(client: sl()));
   sl.registerLazySingleton<AuthRemoteDataSource>(
-      () => AuthRemoteDataSourceImpl(client: sl()));
+          () => AuthRemoteDataSourceImpl(client: sl()));
   sl.registerLazySingleton<ProfileRemoteDataSource>(
-      () => ProfileRemoteDataSourceImpl(client: sl()));
+          () => ProfileRemoteDataSourceImpl(client: sl()));
   sl.registerLazySingleton<PostRemoteDataSource>(
-      () => PostRemoteDataSourceImpl(client: sl()));
+          () => PostRemoteDataSourceImpl(client: sl()));
   sl.registerLazySingleton<UploadRemoteDataSource>(
-      () => UploadRemoteDataSourceImpl(client: sl()));
+          () => UploadRemoteDataSourceImpl(client: sl()));
   sl.registerLazySingleton<CommunityRemoteDataSource>(
-      () => CommunityRemoteDataSourceImpl(client: sl()));
+          () => CommunityRemoteDataSourceImpl(client: sl()));
   sl.registerLazySingleton<ChatRemoteDataSource>(
-      () => ChatRemoteDataSourceImpl(client: sl()));
+          () => ChatRemoteDataSourceImpl(client: sl()));
   sl.registerLazySingleton<EventRemoteDataSource>(
-      () => EventRemoteDataSourceImpl(client: sl()));
+          () => EventRemoteDataSourceImpl(client: sl()));
   sl.registerLazySingleton<NotificationRemoteDataSource>(
-      () => NotificationRemoteDataSourceImpl(client: sl()));
+          () => NotificationRemoteDataSourceImpl(client: sl()));
 
   // register usecase
   sl.registerLazySingleton(() => SignupUsecase(sl()));
@@ -238,28 +254,20 @@ void init() async {
 
   // register bloc
   sl.registerFactory(() => RegisterBloc(registerUseCase: sl()));
-  sl.registerFactory(
-      () => LoginWithEmailBloc(loginUseCase: sl(), googleLoginCase: sl()));
   sl.registerFactory(() => ResendOtpBloc(resendOTPUsecase: sl()));
   sl.registerFactory(() => ForgotPasswordBloc(forgotPasswordUsecase: sl()));
   sl.registerFactory(() => OtpBloc(verifyOTPUsecase: sl()));
-  sl.registerFactory(
-      () => GoogleAuthenticationBloc(googleAuthenticationaUsecase: sl()));
   sl.registerFactory(() => ChangePasswordBloc(changePasswordUsecase: sl()));
   sl.registerFactory(() => GetAllPostsBloc(getAllPostsUsecase: sl()));
   sl.registerFactory(() => UploadPostBloc(uploadPostUsecase: sl()));
   sl.registerFactory(() => ReportPostBloc(reportPostUsecase: sl()));
   sl.registerFactory(() => FeedbackBloc(feedbackUsecase: sl()));
   sl.registerFactory(() => GetPostByIdBloc(getPostByIdUsecase: sl()));
-  sl.registerFactory(
-      () => GetCommentsByPostIdBloc(getCommentsByPostIdUsecase: sl()));
   sl.registerFactory(() => UpdateLocationBloc(updateLocationUsecase: sl()));
   sl.registerFactory(() => DeletePostBloc(deletePostUsecase: sl()));
   sl.registerFactory(() => UploadFileBloc(uploadFileUsecase: sl()));
   sl.registerFactory(() => AddCommentBloc(addCommentUsecase: sl()));
   sl.registerFactory(() => VotePollBloc(votePollUsecase: sl()));
-  sl.registerFactory(
-      () => FetchCommentReplyBloc(fetchCommentReplyUsecase: sl()));
   sl.registerFactory(() => GiveAwardBloc(giveAwardUsecase: sl()));
   sl.registerFactory(() => GetGenderAndDOBBloc(getGenderAndDOBUsecase: sl()));
   sl.registerFactory(() => GetProfileBloc(getProfileUsecase: sl()));
@@ -273,8 +281,6 @@ void init() async {
   sl.registerFactory(() => EditProfileBloc(editProfileUsecase: sl()));
   sl.registerFactory(() => GetMyAwardsBloc(getMyAwardsUsecase: sl()));
   sl.registerFactory(() => CommunityMainCubit(sl()));
-  sl.registerFactory(() => CommunityDetailsCubit(sl(), sl(), sl(), sl(), sl(),
-      sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl()));
   sl.registerFactory(() => CommunityCreateCubit(sl(), sl()));
   sl.registerFactory(() => CommunitySearchCubit(sl(), sl()));
   sl.registerFactory(() => ChatMainCubit(sl()));
@@ -291,7 +297,7 @@ void init() async {
   // register network info
   sl.registerLazySingleton<http.Client>(() => http.Client());
   sl.registerLazySingleton<NetworkInfo>(
-    () => NetworkInfoImpl(
+        () => NetworkInfoImpl(
       InternetConnectionChecker(),
     ),
   );
