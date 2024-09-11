@@ -1,5 +1,5 @@
-// const kBaseUrl = "https://dev.neighborly.in/api";
-const kBaseUrl = "https://neighborly.in/api";
+const kBaseUrl = "https://dev.neighborly.in/api";
+// const kBaseUrl = "https://neighborly.in/api";
 
 const kBaseSocketUrl = "ws://54.90.230.2:3001";
 
