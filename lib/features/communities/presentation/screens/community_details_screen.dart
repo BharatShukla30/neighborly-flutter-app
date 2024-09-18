@@ -16,7 +16,7 @@ import '../../../../core/widgets/stacked_avatar_indicator_widget.dart';
 import '../bloc/community_detail_cubit.dart';
 import '../widgets/community_details_sheemer.dart';
 import '../widgets/community_section_about.dart';
-import '../widgets/community_section_chat.dart'; 
+import '../widgets/community_section_chat.dart';
 
 class CommunityDetailsScreen extends StatefulWidget {
   final String communityId;
@@ -30,10 +30,11 @@ class CommunityDetailsScreen extends StatefulWidget {
   State<CommunityDetailsScreen> createState() => _CommunityDetailsScreenState();
 }
 
-class _CommunityDetailsScreenState extends State<CommunityDetailsScreen> with SingleTickerProviderStateMixin {
+class _CommunityDetailsScreenState extends State<CommunityDetailsScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  late var communityDetailCubit;
-  late bool isJoined;
+  late CommunityDetailsCubit communityDetailCubit;
+   bool isJoined = false;
   late bool isAdmin;
   late CommunityModel? communityCache;
 
@@ -42,7 +43,6 @@ class _CommunityDetailsScreenState extends State<CommunityDetailsScreen> with Si
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     communityDetailCubit = BlocProvider.of<CommunityDetailsCubit>(context);
-
     communityDetailCubit.init(widget.communityId);
     isAdmin = false;
   }
@@ -54,20 +54,34 @@ class _CommunityDetailsScreenState extends State<CommunityDetailsScreen> with Si
   }
 
   Widget topElement(String avatarUrl) {
+    var color = "0xff$avatarUrl".replaceAll('#', '');
     return Container(
       height: MediaQuery.of(context).size.height * 0.30,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        // borderRadius: BorderRadius.circular(10),
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: CachedNetworkImageProvider(avatarUrl),
-        ),
-      ),
+      decoration: avatarUrl.contains('#')
+          ? BoxDecoration(
+              color: Color(int.parse(color)),
+              borderRadius: BorderRadius.circular(10),
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: CachedNetworkImageProvider(avatarUrl),
+              ),
+            )
+          : BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(10),
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: CachedNetworkImageProvider(avatarUrl),
+              ),
+            ),
     );
   }
 
-  Widget titleArea({required String title, required num userCount, required List<UserSimpleModel> users, required bool isPublic}) {
+  Widget titleArea(
+      {required String title,
+      required num userCount,
+      required List<UserSimpleModel> users,
+      required bool isPublic}) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
       child: Row(
@@ -153,17 +167,25 @@ class _CommunityDetailsScreenState extends State<CommunityDetailsScreen> with Si
           //
           //
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               // Lógica ao clicar no botão
               // context.go('/groups/create');
-              if (isJoined) {
-                bottomSheetMenu(context, '', communityCache?.name ?? '', communityCache?.isMuted ?? false);
-              }
+              // if (isJoined) {
+              //   bottomSheetMenu(context, '', communityCache?.name ?? '', communityCache?.isMuted ?? false);
+              // }
+              // else{
+              await communityDetailCubit.addUser(widget.communityId);
+              await communityDetailCubit.init(widget.communityId);
+              isJoined = true;
+              setState(() {});
+              // }
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: isJoined ? Colors.white : AppColors.primaryColor,
+              backgroundColor:
+                  isJoined ? Colors.grey[300] : AppColors.primaryColor,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(50), // Ajuste o raio conforme necessário
+                borderRadius: BorderRadius.circular(
+                    50), // Ajuste o raio conforme necessário
               ),
               // padding: EdgeInsets.all(15)
             ),
@@ -171,7 +193,10 @@ class _CommunityDetailsScreenState extends State<CommunityDetailsScreen> with Si
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Text(
                 isJoined ? 'Joined' : 'Join',
-                style: TextStyle(color: isJoined ? AppColors.primaryColor : Colors.white, fontSize: 18, height: 0.3),
+                style: TextStyle(
+                    color: isJoined ? Colors.white : Colors.white,
+                    fontSize: 18,
+                    height: 0.3),
               ),
             ),
           )
@@ -223,7 +248,8 @@ class _CommunityDetailsScreenState extends State<CommunityDetailsScreen> with Si
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.grey[300],
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50), // Ajuste o raio conforme necessário
+                          borderRadius: BorderRadius.circular(
+                              50), // Ajuste o raio conforme necessário
                         ),
                         // padding: EdgeInsets.all(15)
                       ),
@@ -231,7 +257,8 @@ class _CommunityDetailsScreenState extends State<CommunityDetailsScreen> with Si
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Text(
                           'Cancel',
-                          style: TextStyle(color: Colors.black, fontSize: 18, height: 0.3),
+                          style: TextStyle(
+                              color: Colors.black, fontSize: 18, height: 0.3),
                         ),
                       ),
                     ),
@@ -253,7 +280,8 @@ class _CommunityDetailsScreenState extends State<CommunityDetailsScreen> with Si
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50), // Ajuste o raio conforme necessário
+                          borderRadius: BorderRadius.circular(
+                              50), // Ajuste o raio conforme necessário
                         ),
                         // padding: EdgeInsets.all(15)
                       ),
@@ -261,7 +289,8 @@ class _CommunityDetailsScreenState extends State<CommunityDetailsScreen> with Si
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Text(
                           'Yes',
-                          style: TextStyle(color: Colors.white, fontSize: 18, height: 0.3),
+                          style: TextStyle(
+                              color: Colors.white, fontSize: 18, height: 0.3),
                         ),
                       ),
                     ),
@@ -275,7 +304,8 @@ class _CommunityDetailsScreenState extends State<CommunityDetailsScreen> with Si
     );
   }
 
-  Future<dynamic> bottomSheetMenu(BuildContext context, String userId, String communityName, bool isMuted) {
+  Future<dynamic> bottomSheetMenu(
+      BuildContext context, String userId, String communityName, bool isMuted) {
     return showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -298,7 +328,9 @@ class _CommunityDetailsScreenState extends State<CommunityDetailsScreen> with Si
                   }),
               MenuIconItem(
                   title: isMuted ? 'Unmute' : 'Mute',
-                  svgPath: isMuted ? 'assets/menu_unmute.svg' : 'assets/menu_mute.svg',
+                  svgPath: isMuted
+                      ? 'assets/menu_unmute.svg'
+                      : 'assets/menu_mute.svg',
                   iconSize: 25,
                   onTap: () {
                     communityDetailCubit.toggleMute();
@@ -434,163 +466,172 @@ class _CommunityDetailsScreenState extends State<CommunityDetailsScreen> with Si
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        leading: Container(
-          margin: EdgeInsets.all(9.0),
-          height: 40,
-          width: 40,
-          child: AppbatButton(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            // icon: LineIcons.angleLeft,
-            icon: Icons.chevron_left_rounded,
-            iconSize: 30,
+    return PopScope(
+     canPop: true,
+      onPopInvoked: (_) async {
+        Navigator.pop(context,isJoined);
+       return Future.value(false);
+      },
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          leading: Container(
+            margin: EdgeInsets.all(9.0),
+            height: 40,
+            width: 40,
+            child: AppbatButton(
+              onTap: () {
+                Navigator.pop(context,isJoined);
+              },
+              // icon: LineIcons.angleLeft,
+              icon: Icons.chevron_left_rounded,
+              iconSize: 30,
+            ),
           ),
-        ),
-        backgroundColor: Colors.transparent,
-        // title: const Text('community create'),
-        actions: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              AppbatButton(
-                onTap: () {
-                  String message = '''
+          backgroundColor: Colors.transparent,
+          // title: const Text('community create'),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                AppbatButton(
+                  onTap: () {
+                    String message = '''
                   Hey, check this community:   ${communityCache?.name} 
-                  ''';
-                  // Lógica ao clicar no botão
-                  // context.go('/groups/create');
-                  ShareIt.text(content: message, androidSheetTitle: 'Look this event');
-
-                  // TODO: remove this, only for presentation/test porpouse
-                  context.push('/groups/admin', extra: communityCache);
-                },
-                icon: Icons.share,
-                iconSize: 20,
-              ),
-              const SizedBox(width: 10),
-              AppbatButton(
-                onTap: () {
-                  print('...TAP menu settings');
-
-                  if (isAdmin) {
+                    ''';
+                    // Lógica ao clicar no botão
+                    // context.go('/groups/create');
+                    ShareIt.text(
+                        content: message, androidSheetTitle: 'Look this event');
+      
+                    // TODO: remove this, only for presentation/test porpouse
                     context.push('/groups/admin', extra: communityCache);
-                  } else {
-                    if (isJoined) {
-                      bottomSheetMenu(context, '', communityCache?.name ?? '', communityCache?.isMuted ?? false);
-                    }
-                  }
-                },
-                // icon: LineIcons.verticalEllipsis,
-                icon: Icons.more_vert_outlined,
-                iconSize: 25,
-              ),
-              const SizedBox(width: 10),
-            ],
-          )
-        ],
-      ),
-      body: BlocBuilder<CommunityDetailsCubit, CommunityDetailsState>(
-        bloc: communityDetailCubit,
-        builder: (context, state) {
-          isJoined = state.community?.isJoined ?? false;
-          communityCache = state.community;
-
-          if (state.status == Status.loading) {
-            return const CommunityDetailsSheemer();
-          }
-
-          // print('... community${state.community}');
-          print('... isMuted${state.community?.isMuted}');
-
-          return Column(
-            children: [
-              //
-              topElement(state.community!.avatarUrl),
-              //
-              //
-              titleArea(
-                title: state.community?.name ?? '...',
-                userCount: state.community?.users.length ?? 0,
-                users: state.community?.users ?? [],
-                isPublic: state.community?.isPublic ?? false,
-              ),
-              //
-              //
-              const SizedBox(height: 15),
-              Container(
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
+                  },
+                  icon: Icons.share,
+                  iconSize: 20,
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 0, right: 5),
-                  child: TabBar(
-                    indicatorColor: AppColors.primaryColor,
-                    unselectedLabelColor: Colors.grey,
-                    unselectedLabelStyle: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16,
-                      color: Colors.grey,
+                const SizedBox(width: 10),
+                AppbatButton(
+                  onTap: () {
+                    print('...TAP menu settings');
+      
+                    if (isAdmin) {
+                      context.push('/groups/admin', extra: communityCache);
+                    } else {
+                      if (isJoined) {
+                        bottomSheetMenu(context, '', communityCache?.name ?? '',
+                            communityCache?.isMuted ?? false);
+                      }
+                    }
+                  },
+                  // icon: LineIcons.verticalEllipsis,
+                  icon: Icons.more_vert_outlined,
+                  iconSize: 25,
+                ),
+                const SizedBox(width: 10),
+              ],
+            )
+          ],
+        ),
+        body: BlocBuilder<CommunityDetailsCubit, CommunityDetailsState>(
+          bloc: communityDetailCubit,
+          builder: (context, state) {
+            // isJoined = state.community?.isJoined ?? false;
+            communityCache = state.community;
+      
+            if (state.status == Status.loading) {
+              return const CommunityDetailsSheemer();
+            }
+      
+            // print('... community${state.community}');
+            print('... isMuted${state.community?.isMuted}');
+      
+            return Column(
+              children: [
+                //
+                topElement(state.community?.icon ?? ''),
+                //
+                //
+                titleArea(
+                  title: state.community?.name ?? '...',
+                  userCount: state.community?.users.length ?? 0,
+                  users: state.community?.users ?? [],
+                  isPublic: state.community?.isPublic ?? false,
+                ),
+                //
+                //
+                const SizedBox(height: 15),
+                Container(
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 0, right: 5),
+                    child: TabBar(
+                      indicatorColor: AppColors.primaryColor,
+                      unselectedLabelColor: Colors.grey,
+                      unselectedLabelStyle: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
+      
+                      // labelColor: AppColors.primaryColor.withOpacity(0.8),
+                      controller: _tabController,
+                      tabAlignment: TabAlignment.start,
+                      isScrollable: true,
+                      // labelPadding: EdgeInsets.only(left: 0, right: 20),
+                      tabs: [
+                        Tab(child: tabTitle('About')),
+                        // Tab(child: tabTitle('Feed')),
+                        Tab(child: tabTitle('Chat')),
+                      ],
                     ),
-
-                    // labelColor: AppColors.primaryColor.withOpacity(0.8),
+                  ),
+                ),
+                Expanded(
+                  child: TabBarView(
                     controller: _tabController,
-                    tabAlignment: TabAlignment.start,
-                    isScrollable: true,
-                    // labelPadding: EdgeInsets.only(left: 0, right: 20),
-                    tabs: [
-                      Tab(child: tabTitle('About')),
-                      // Tab(child: tabTitle('Feed')),
-                      Tab(child: tabTitle('Chat')),
+                    children: [
+                      //
+                      // section ABOUT
+                      CommunitySectionAbout(
+                        community: state.community!,
+                      ),
+                      //
+                      //
+                      // CommunitySectionPosts(
+                      //     isLoading: false,
+                      //     isEmpty: (state.status != Status.loading && state.posts.isEmpty),
+                      //     posts: state.posts,
+                      //     onReport: (postId) {
+                      //       print('postId=$postId');
+                      //     },
+                      //     onDelete: (postId) {
+                      //       print('postId=$postId');
+                      //     },
+                      //     onTap: (postId) {
+                      //       print('postId=$postId');
+                      //     },
+                      //     onReact: (postId) {
+                      //       print('postId=$postId');
+                      //     }),
+                      //
+                      //  section CHAT
+                      CommunitySectionChat(community: state.community!),
+                      //
+                      //
                     ],
                   ),
                 ),
-              ),
-              Expanded(
-                child: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    //
-                    // section ABOUT
-                    CommunitySectionAbout(
-                      community: state.community!,
-                    ),
-                    //
-                    //
-                    // CommunitySectionPosts(
-                    //     isLoading: false,
-                    //     isEmpty: (state.status != Status.loading && state.posts.isEmpty),
-                    //     posts: state.posts,
-                    //     onReport: (postId) {
-                    //       print('postId=$postId');
-                    //     },
-                    //     onDelete: (postId) {
-                    //       print('postId=$postId');
-                    //     },
-                    //     onTap: (postId) {
-                    //       print('postId=$postId');
-                    //     },
-                    //     onReact: (postId) {
-                    //       print('postId=$postId');
-                    //     }),
-                    //
-                    //  section CHAT
-                    CommunitySectionChat(community: state.community!),
-                    //
-                    //
-                  ],
-                ),
-              ),
-              //
-              //
-            ],
-          );
-        },
+                //
+                //
+              ],
+            );
+          },
+        ),
       ),
     );
   }

@@ -42,7 +42,7 @@ class CommunityCreateCubit extends Cubit<CommunityCreateState> {
 
   Future createCommunity(CommunityModel newCommunity, File? pictureFile) async {
     emit(state.copyWith(status: Status.loading));
-    final result = await createCommunityUsecase(community: newCommunity.copyWith(avatarUrl: state.imageUrl));
+    final result = await createCommunityUsecase(community: newCommunity.copyWith(avatarUrl: state.imageUrl),pictureFile: pictureFile);
 
     result.fold(
       (failure) {

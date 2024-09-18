@@ -20,6 +20,7 @@ abstract class CommunityRemoteDataSource {
 
   Future<void> leaveCommunity({required String communityId});
   Future<void> reportCommunity({required String communityId, required String reason});
+  Future<void> addUser({required String communityId,});
 
   Future<String> createCommunity({required CommunityModel community, File? pictureFile});
 

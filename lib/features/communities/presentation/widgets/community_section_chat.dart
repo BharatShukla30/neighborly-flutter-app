@@ -29,14 +29,14 @@ class CommunitySectionChat extends StatelessWidget {
 
             TileChat(
               name: community.name,
-              avatarUrl: community.avatarUrl,
+              avatarUrl: community.admins[0].avatarUrl,
               onTap: () {
                 context.push(
                   '/chat/group/${community.id}',
                   extra: ChatRoomModel(
                     id: community.id,
                     name: community.name,
-                    avatarUrl: community.avatarUrl,
+                    avatarUrl: community.admins[0].avatarUrl,
                     lastMessage: '',
                     lastMessageDate: DateTime.now().toIso8601String(),
                     isMuted: false,

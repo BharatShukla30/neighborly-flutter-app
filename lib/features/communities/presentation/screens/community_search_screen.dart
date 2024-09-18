@@ -283,7 +283,7 @@ class TrendListArea extends StatelessWidget {
       child: Row(
         children: [
           UserAvatarStyledWidget(
-            avatarUrl: community.avatarUrl,
+            avatarUrl: community.avatarUrl??'https://thumbs.dreamstime.com/b/user-profile-group-set-icon-symbol-vector-eps-141506805.jpg',
             avatarSize: 22,
             avatarBorderSize: 0,
           ),
@@ -397,7 +397,7 @@ class _ResultAreaState extends State<ResultArea> with SingleTickerProviderStateM
         child: Row(
           children: [
             UserAvatarStyledWidget(
-              avatarUrl: resultLine is CommunityModel ? resultLine.avatarUrl : (resultLine as UserSimpleModel).avatarUrl,
+              avatarUrl: resultLine is CommunityModel ? resultLine.avatarUrl??'https://thumbs.dreamstime.com/b/user-profile-group-set-icon-symbol-vector-eps-141506805.jpg' : (resultLine as UserSimpleModel).avatarUrl,
               avatarSize: 22,
               avatarBorderSize: 0,
             ),

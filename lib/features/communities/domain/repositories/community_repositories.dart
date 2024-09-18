@@ -24,6 +24,7 @@ abstract class CommunityRepositories {
 
   Future<Either<Failure, void>> leaveCommunity({required String communityId});
   Future<Either<Failure, void>> reportCommunity({required String communityId, required String reason});
+  Future<Either<Failure, void>> addUser({required String communityId,});
 
   Future<Either<Failure, String>> createCommunity({required CommunityModel community, File? pictureFile});
 

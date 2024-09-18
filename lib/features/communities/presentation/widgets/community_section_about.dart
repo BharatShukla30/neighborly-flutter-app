@@ -67,6 +67,7 @@ class DescriptionArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
       padding: EdgeInsets.all(15),
       color: Colors.white,
       child: Column(

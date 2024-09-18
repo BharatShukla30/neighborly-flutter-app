@@ -164,6 +164,21 @@ class CommunityRepositoriesImpl implements CommunityRepositories {
       return const Left(ServerFailure(message: 'No internet connection'));
     }
   }
+  @override
+  Future<Either<Failure, void>> addUser({required String communityId}) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final result = await remoteDataSource.addUser(communityId: communityId);
+        return Right(result);
+      } on ServerFailure catch (e) {
+        return Left(ServerFailure(message: e.message));
+      } catch (e) {
+        return Left(ServerFailure(message: '$e'));
+      }
+    } else {
+      return const Left(ServerFailure(message: 'No internet connection'));
+    }
+  }
 
   @override
   Future<Either<Failure, void>> updateDescription({required String communityId, required String newDescription}) async {

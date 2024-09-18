@@ -45,13 +45,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       List<String> cookies = response.headers['set-cookie']?.split(',') ?? [];
       String userID = jsonDecode(response.body)['user']['_id'];
       String username = jsonDecode(response.body)['user']['username'];
-      String accessToken = jsonDecode(response.body)['user']['access_token'];
-      String refreshToken = jsonDecode(response.body)['user']['refresh_token'];
+      String accessToken = jsonDecode(response.body)['user']['accessToken'] ??'';
+      String refreshToken = jsonDecode(response.body)['user']['refreshToken']??'';
       String proPic = jsonDecode(response.body)['user']['picture'];
       List<dynamic> location = jsonDecode(response.body)['user']
           ['current_coordinates']['coordinates'];
       String? email = jsonDecode(response.body)['user']['email'];
-
       ShardPrefHelper.setAccessToken(accessToken);
       ShardPrefHelper.setRefreshToken(refreshToken);
       ShardPrefHelper.setCookie(cookies);

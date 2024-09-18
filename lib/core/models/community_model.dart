@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:neighborly_flutter_app/core/utils/shared_preference.dart';
+
 import '../entities/community_entity.dart';
 import 'user_simple_model.dart';
 
@@ -21,6 +23,7 @@ class CommunityModel extends CommunityEntity {
     required super.blockList,
     super.radius,
     super.latLong,
+    super.icon,
   });
 
   Map<String, dynamic> toMap() {
@@ -41,34 +44,45 @@ class CommunityModel extends CommunityEntity {
       'blockList': blockList.map((x) => x.toMap()).toList(),
       'locationStr': locationStr,
       'latLong': latLong,
+      'icon': icon,
     };
   }
 
   factory CommunityModel.fromMap(Map<String, dynamic> map) {
-
     return CommunityModel(
       id: map['_id'] ?? map['id'] ?? "0",
       name: map['name'] ?? '',
       description: map['description'] ?? '',
       createdAt: map['createdAt'] ?? '',
-      avatarUrl: map['avatarUrl'] ?? '',
+      avatarUrl: map['image'] ?? '',
+      icon: map['icon'] ?? '',
       karma: map['karma'] ?? 0,
       radius: map['radius'] ?? 0,
       membersCount: map['membersCount'] ?? 0,
-      isPublic: map['isOpen'] ?? map['isPublic']  ?? false,
-      isJoined: map['isJoined'] ?? map['isJoined']  ?? false,
-      isMuted: map['isMuted'] ?? map['isMuted']  ?? false,
-      users: map['members'] != null ? List<UserSimpleModel>.from(map['members']?.map((x) => UserSimpleModel.fromMap(x))) : [],
-      admins: map['admin'] != null ? List<UserSimpleModel>.from(map['admin']?.map((x) => UserSimpleModel.fromMap(x))) : [],
-      blockList: map['blockList']  != null ?  List<UserSimpleModel>.from(map['blockList']?.map((x) => UserSimpleModel.fromMap(x))) : [],
+      isPublic: map['isOpen'] ?? map['isPublic'] ?? false,
+      isMuted: map['isMuted'] ?? false,
+      users: map['members'] != null
+          ? List<UserSimpleModel>.from(
+              map['members']?.map((x) => UserSimpleModel.fromMap(x)))
+          : [],
+      admins: map['admin'] != null
+          ? List<UserSimpleModel>.from(
+              map['admin']?.map((x) => UserSimpleModel.fromMap(x)))
+          : [],
+      blockList: map['blockList'] != null
+          ? List<UserSimpleModel>.from(
+              map['blockList']?.map((x) => UserSimpleModel.fromMap(x)))
+          : [],
       locationStr: map['locationStr'] ?? '',
       // latLong: map['latLong']["coordinates"] ? List<double>.from(map['latLong']["coordinates"]) : [],
+      isJoined: map['isJoined'] ?? map['isJoined']  ?? false,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory CommunityModel.fromJson(Map<String, dynamic> source) => CommunityModel.fromMap(source);
+  factory CommunityModel.fromJson(Map<String, dynamic> source) =>
+      CommunityModel.fromMap(source);
 
   CommunityModel copyWith({
     String? id,
@@ -88,6 +102,7 @@ class CommunityModel extends CommunityEntity {
     List<UserSimpleModel>? blockList,
     String? locationStr,
     List<double>? latLong,
+    String? icon,
   }) {
     return CommunityModel(
       id: id ?? this.id,
@@ -106,6 +121,7 @@ class CommunityModel extends CommunityEntity {
       blockList: blockList ?? this.blockList,
       locationStr: locationStr ?? this.locationStr,
       latLong: latLong ?? this.latLong,
+      icon: icon ?? this.icon,
     );
   }
 
@@ -118,7 +134,9 @@ class CommunityModel extends CommunityEntity {
     var list = <CommunityModel>[];
 
     if (json.isNotEmpty) {
-      list = json.map<CommunityModel>((jsomItem) => CommunityModel.fromMap(jsomItem)).toList();
+      list = json
+          .map<CommunityModel>((jsomItem) => CommunityModel.fromMap(jsomItem))
+          .toList();
     }
 
     return list;

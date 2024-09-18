@@ -3,18 +3,14 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/error/failures.dart';
 import '../repositories/community_repositories.dart';
 
-class UpdateLocationCommunityUsecase {
+class AddUserCommunityUseCase {
   final CommunityRepositories repository;
 
-  UpdateLocationCommunityUsecase(this.repository);
+  AddUserCommunityUseCase(this.repository);
 
   Future<Either<Failure, void>> call({
     required String communityId,
-    required String newLocation,
   }) async {
-    return await repository.updateLocation(
-      communityId: communityId,
-      newLocation: newLocation,
-    );
+    return await repository.addUser(communityId: communityId);
   }
 }

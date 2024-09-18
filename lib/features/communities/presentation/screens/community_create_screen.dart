@@ -24,7 +24,7 @@ class CommunityCreateScreen extends StatefulWidget {
 }
 
 class _CommunityCreateScreenState extends State<CommunityCreateScreen> {
-  late var communityCreateCubit;
+  late CommunityCreateCubit communityCreateCubit;
   int currentStep = 1;
   File? fileToUpload;
 
@@ -266,8 +266,8 @@ class _CommunityCreateScreenState extends State<CommunityCreateScreen> {
             case Status.loading:
               break;
             case Status.failure:
-              // hideLoader();
-              // showError(state.errorMessage ?? 'Some error');
+            // hideLoader();
+            // showError(state.errorMessage ?? 'Some error');
               print('ERROR ${state.failure?.message}');
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -332,8 +332,6 @@ class _CommunityCreateScreenState extends State<CommunityCreateScreen> {
                               setState(() {
                                 fileToUpload = newFile;
                               });
-
-                              communityCreateCubit.onUpdateFile(newFile);
                             }
                           },
                         ),
@@ -623,15 +621,15 @@ class _Step4areaState extends State<Step4area> {
                   ),
                   child: selectedImage != null && selectedImage?.path != null
                       ? Image.file(
-                          selectedImage!,
-                          width: double.infinity,
-                          // height: 260,
-                          fit: BoxFit.cover,
-                        )
+                    selectedImage!,
+                    width: double.infinity,
+                    // height: 260,
+                    fit: BoxFit.cover,
+                  )
                       : Image.network(
-                          'https://eu.ui-avatars.com/api/?name=XX&background=random&rounded=true',
-                          fit: BoxFit.cover,
-                        ),
+                    'https://eu.ui-avatars.com/api/?name=XX&background=random&rounded=true',
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               Positioned(
@@ -639,7 +637,7 @@ class _Step4areaState extends State<Step4area> {
                 right: 0,
                 child: GestureDetector(
                   onTap: () {
-                    if(widget.isLoading == true) return; 
+                    if(widget.isLoading == true) return;
 
                     _pickImage();
                   },

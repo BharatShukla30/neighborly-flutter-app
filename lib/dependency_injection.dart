@@ -33,6 +33,7 @@ import 'features/communities/data/data_sources/community_remote_data_source/comm
 import 'features/communities/data/data_sources/community_remote_data_source/community_remote_data_source_impl.dart';
 import 'features/communities/data/repositories/community_repositories_impl.dart';
 import 'features/communities/domain/repositories/community_repositories.dart';
+import 'features/communities/domain/usecases/add_user_community_usecase.dart';
 import 'features/communities/domain/usecases/create_community_usecase.dart';
 import 'features/communities/domain/usecases/get_all_communities_usecase.dart';
 import 'features/communities/domain/usecases/get_community_usecase.dart';
@@ -221,6 +222,7 @@ void init() async {
   sl.registerLazySingleton(() => LeaveCommunityUsecase(sl()));
   sl.registerLazySingleton(() => UpdateMuteCommunityUsecase(sl()));
   sl.registerLazySingleton(() => ReportCommunityUsecase(sl()));
+  sl.registerLazySingleton(() => AddUserCommunityUseCase(sl()));
   sl.registerLazySingleton(() => UpdateIconCommunityUsecase(sl()));
   sl.registerLazySingleton(() => UpdateDescriptionCommunityUsecase(sl()));
   sl.registerLazySingleton(() => GetSearchHistoryCommunitiesUsecase(sl()));
@@ -274,7 +276,7 @@ void init() async {
   sl.registerFactory(() => GetMyAwardsBloc(getMyAwardsUsecase: sl()));
   sl.registerFactory(() => CommunityMainCubit(sl()));
   sl.registerFactory(() => CommunityDetailsCubit(sl(), sl(), sl(), sl(), sl(),
-      sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl()));
+      sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl(),sl()));
   sl.registerFactory(() => CommunityCreateCubit(sl(), sl()));
   sl.registerFactory(() => CommunitySearchCubit(sl(), sl()));
   sl.registerFactory(() => ChatMainCubit(sl()));

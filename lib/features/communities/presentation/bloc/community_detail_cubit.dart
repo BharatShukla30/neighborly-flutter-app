@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:neighborly_flutter_app/features/communities/domain/usecases/add_user_community_usecase.dart';
 
 import '../../../../core/constants/status.dart';
 import '../../../../core/entities/post_enitity.dart';
@@ -37,6 +38,7 @@ class CommunityDetailsCubit extends Cubit<CommunityDetailsState> {
   final LeaveCommunityUsecase leaveCommunityUsecase;
   final UpdateMuteCommunityUsecase updateMuteCommunityUsecase;
   final ReportCommunityUsecase reportCommunityUsecase;
+  final AddUserCommunityUseCase addUserCommunityUseCase;
   final UpdateIconCommunityUsecase updateIconCommunityUsecase;
   final UpdateDescriptionCommunityUsecase updateDescriptionCommunityUsecase;
   final UploadFileUsecase uploadFileUsecase;
@@ -52,13 +54,14 @@ class CommunityDetailsCubit extends Cubit<CommunityDetailsState> {
     this.updateRadiusCommunityUsecase,
     this.leaveCommunityUsecase,
     this.reportCommunityUsecase,
+    this.addUserCommunityUseCase,
     this.updateIconCommunityUsecase,
     this.updateDescriptionCommunityUsecase,
     this.updateMuteCommunityUsecase,
     this.uploadFileUsecase,
   ) : super(const CommunityDetailsState());
 
-  void init(String communityId) async {
+  Future<void> init(String communityId) async {
     print('... COMMUNITY DETAIL BLOC - init - id=${communityId}');
 
     await getCommunityDetail(communityId);
@@ -313,6 +316,23 @@ class CommunityDetailsCubit extends Cubit<CommunityDetailsState> {
       },
       (communityResp) {
         print('...reportCommunity done');
+        emit(state.copyWith(status: Status.success));
+      },
+    );
+  }
+  Future addUser(String communityId) async {
+    emit(state.copyWith(status: Status.loading));
+
+    print('...COMMUNITY DETAIL CUBIT addUser');
+    final result = await addUserCommunityUseCase(communityId: communityId);
+
+    result.fold(
+      (failure) {
+        print('...failure=${failure}');
+        emit(state.copyWith(status: Status.failure, failure: failure, errorMessage: failure.message));
+      },
+      (communityResp) {
+        print('...add User Community done');
         emit(state.copyWith(status: Status.success));
       },
     );

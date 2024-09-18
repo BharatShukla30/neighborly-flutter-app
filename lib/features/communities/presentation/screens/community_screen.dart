@@ -184,8 +184,18 @@ class _CommunityScreenState extends State<CommunityScreen> {
                                 itemCount: state.communities.length,
                                 itemBuilder: (context, index) {
                                   return Container(
-                                    child: CommunityCardWidget(
-                                      community: state.communities[index],
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        var res = await context.push('/groups/${state.communities[index].id}');
+                                        if(res is bool){
+                                          if (res){
+                                            communityMainCubit.init();
+                                          }
+                                        }
+                                      },
+                                      child: CommunityCardWidget(
+                                        community: state.communities[index],
+                                      ),
                                     ),
                                   );
                                 },
